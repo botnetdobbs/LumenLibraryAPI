@@ -36,7 +36,7 @@ class AuthTest extends TestCase
         ];
 
         $response = $this->post('/api/v1/auth/login', $credentials);
-        dd($response);
+
         $response->assertResponseStatus(200);
     }
 }

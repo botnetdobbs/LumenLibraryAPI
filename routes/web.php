@@ -23,6 +23,6 @@ $router->group(['prefix' => 'api/v1'], function() use(&$router) {
     });
 
     $router->group(['middleware' => 'auth:api'], function() use(&$router) {
-        $router->get('authors', function() { return [];});
+        $router->post('authors', 'AuthorsController@store');
     });
 });
