@@ -81,6 +81,39 @@ class AuthorsTest extends TestCase
      *
      * @return void
      */
+    public function authUserCanEditAuthor()
+    {
+        $author = factory(Author::class)->create();
+        $user = factory(User::class)->create();
+        $this->be($user);
+
+        $response = $this->put("/api/v1/authors/{$author->id}", ["name" => "Updated Name"]);
+        $authorUpdate = $this->get("/api/v1/authors/{$author->id}");
+
+        $response->assertResponseStatus(200);
+        $authorUpdate->seeJson(["name" => "Updated Name"]);
+    }
+
+    /**
+     * @test
+     *
+     * @return void
+     */
+    public function editingNonExistingAuthorReturns404()
+    {
+        $user = factory(User::class)->create();
+        $this->be($user);
+
+        $response = $this->put("/api/v1/authors/{3}", ["name" => "Updated Name"]);
+
+        $response->assertResponseStatus(404);
+    }
+
+    /**
+     * @test
+     *
+     * @return void
+     */
     public function authUserCanDeleteAuthor()
     {
         $author = factory(Author::class)->create();

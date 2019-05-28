@@ -64,6 +64,32 @@ class AuthorsController extends Controller
     }
 
     /**
+     * Update an existing author's details
+     *
+     * @param Request $request
+     * @param int $id
+     * @return void
+     */
+    public function update(Request $request, $id)
+    {
+        $this->validate($request, [
+            'name' => 'required|max:55',
+            'bio' => 'max:300',
+            'email' => 'email|unique:authors'
+        ]);
+        
+        try {
+            $author = Author::findOrFail($id);
+        } catch (ModelNotFoundException $e) {
+            
+            return response()->json(["status" => "error", "message" => $e->getMessage()], 404);
+        }
+        $author->update($request->all());
+
+        return response()->json([], 200);
+    }
+
+    /**
      * Delete an author
      *
      * @param int $id

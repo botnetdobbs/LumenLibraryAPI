@@ -35,6 +35,7 @@ $router->group(['prefix' => 'api/v1'], function() use(&$router) {
 
         $router->group(['middleware' => 'auth:api'], function() use(&$router) {
             $router->post('/', 'AuthorsController@store');
+            $router->put('/{id}', 'AuthorsController@update');
             $router->delete('/{id}', 'AuthorsController@destroy');
         });
         $router->get('/', 'AuthorsController@index');
