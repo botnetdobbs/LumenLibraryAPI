@@ -28,6 +28,12 @@ class AuthorsController extends Controller
         return Author::paginate(8);
     }
 
+    /**
+     * Return a specific author
+     *
+     * @param [type] $id
+     * @return void
+     */
     public function show($id)
     {
         try {
@@ -55,6 +61,23 @@ class AuthorsController extends Controller
 
         $author = Author::create($request->all());
         return response()->json($author->only(['name', 'email', 'bio']), 201);
+    }
+
+    /**
+     * Delete an author
+     *
+     * @param int $id
+     * @return void
+     */
+    public function destroy($id)
+    {
+        try {
+            $author = Author::findOrFail($id);
+        } catch (ModelNotFoundException $e) {
+            return response()->json(["status" => "error", "message" => $e->getMessage()], 404);
+        }
+        $author->delete();
+        return response()->json([], 200);
     }
     
 }

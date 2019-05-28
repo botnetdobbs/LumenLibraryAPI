@@ -75,4 +75,35 @@ class AuthorsTest extends TestCase
 
         $response->assertResponseStatus(404);
     }
+
+    /**
+     * @test
+     *
+     * @return void
+     */
+    public function authUserCanDeleteAuthor()
+    {
+        $author = factory(Author::class)->create();
+        $user = factory(User::class)->create();
+        $this->be($user);
+
+        $response = $this->delete("/api/v1/authors/{$author->id}");
+
+        $response->assertResponseStatus(200);
+    }
+
+    /**
+     * @test
+     *
+     * @return void
+     */
+    public function deletingNonExistingAuthorReturns404()
+    {
+        $user = factory(User::class)->create();
+        $this->be($user);
+
+        $response = $this->delete("/api/v1/authors/9");
+
+        $response->assertResponseStatus(404);
+    }
 }
