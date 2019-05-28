@@ -16,18 +16,28 @@ $router->get('/', function () use ($router) {
     return $router->app->version();
 });
 
+/**
+ * Routes
+ */
 $router->group(['prefix' => 'api/v1'], function() use(&$router) {
+    /**
+     * Auth
+     */
     $router->group(['prefix' => 'auth'], function() use(&$router) {
         $router->post('register', 'AuthController@register');
         $router->post('login', 'AuthController@login');
     });
 
+    /**
+     * Authors
+     */
     $router->group(['prefix' => 'authors'], function() use(&$router) {
 
         $router->group(['middleware' => 'auth:api'], function() use(&$router) {
             $router->post('/', 'AuthorsController@store');
         });
         $router->get('/', 'AuthorsController@index');
+        $router->get('{id}', 'AuthorsController@show');
     });
 
 });

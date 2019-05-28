@@ -3,7 +3,6 @@
 use Laravel\Lumen\Testing\DatabaseMigrations;
 use Laravel\Lumen\Testing\DatabaseTransactions;
 use App\User;
-use Tymon\JWTAuth\JWTGuard;
 use App\Author;
 
 class AuthorsTest extends TestCase
@@ -49,5 +48,31 @@ class AuthorsTest extends TestCase
         $response = $this->get('/api/v1/authors');
         
         $response->assertResponseStatus(200);
+    }
+
+    /**
+     * @test
+     *
+     * @return void
+     */
+    public function anyUserCanViewSingleAuthor()
+    {
+        $author = factory(Author::class)->create();
+
+        $response = $this->get("/api/v1/authors/{$author->id}");
+
+        $response->assertResponseStatus(200);
+    }
+
+    /**
+     * @test
+     *
+     * @return void
+     */
+    public function returns404OnAuthorNotFound()
+    {
+        $response = $this->get("/api/v1/authors/9");
+
+        $response->assertResponseStatus(404);
     }
 }

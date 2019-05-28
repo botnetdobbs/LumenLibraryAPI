@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use App\Author;
 
@@ -25,6 +26,17 @@ class AuthorsController extends Controller
     public function index()
     {
         return Author::paginate(8);
+    }
+
+    public function show($id)
+    {
+        try {
+            $author = Author::findOrFail($id);
+        } catch (ModelNotFoundException $e) {
+            
+            return response()->json(["status" => "error", "message" => $e->getMessage()], 404);
+        }
+        return response()->json($author, 200);
     }
 
     /**
