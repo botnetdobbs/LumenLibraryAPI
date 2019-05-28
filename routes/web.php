@@ -22,7 +22,12 @@ $router->group(['prefix' => 'api/v1'], function() use(&$router) {
         $router->post('login', 'AuthController@login');
     });
 
-    $router->group(['middleware' => 'auth:api'], function() use(&$router) {
-        $router->post('authors', 'AuthorsController@store');
+    $router->group(['prefix' => 'authors'], function() use(&$router) {
+
+        $router->group(['middleware' => 'auth:api'], function() use(&$router) {
+            $router->post('/', 'AuthorsController@store');
+        });
+        $router->get('/', 'AuthorsController@index');
     });
+
 });

@@ -4,6 +4,7 @@ use Laravel\Lumen\Testing\DatabaseMigrations;
 use Laravel\Lumen\Testing\DatabaseTransactions;
 use App\User;
 use Tymon\JWTAuth\JWTGuard;
+use App\Author;
 
 class AuthorsTest extends TestCase
 {
@@ -34,5 +35,19 @@ class AuthorsTest extends TestCase
         $author = ['name' => 'test author', 'bio' => 'A Kenyan author and a music enthusiast. Plays violin, Piano and Drums.', 'email' => 'test.author@email.com'];
         $response = $this->post('/api/v1/authors', $author);
         $response->assertResponseStatus(401);
+    }
+
+    /**
+     * @test
+     *
+     * @return void
+     */
+    public function userCanViewAllAuthors()
+    {
+        factory(Author::class, 8)->create();
+
+        $response = $this->get('/api/v1/authors');
+        
+        $response->assertResponseStatus(200);
     }
 }

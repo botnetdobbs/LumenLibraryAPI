@@ -18,6 +18,16 @@ class AuthorsController extends Controller
     }
 
     /**
+     * Return all the authors
+     *
+     * @return void
+     */
+    public function index()
+    {
+        return Author::paginate(8);
+    }
+
+    /**
      * Create new author
      *
      * @param Request $request
