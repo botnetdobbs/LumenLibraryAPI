@@ -15,5 +15,6 @@ $factory->define(App\User::class, function (Faker\Generator $faker) {
     return [
         'name' => $faker->name,
         'email' => $faker->email,
+        'password' => "$2y$10\$xtAAnYknhIX1YwqjFdev4uH1dY2Efazco1foIeUV2d5xJeLPqo44e" //password
     ];
 });
