@@ -35,6 +35,26 @@ class BooksController extends Controller
     }
 
     /**
+     * Store a book in the records
+     *
+     * @param Request $request
+     * @return void
+     */
+    public function store(Request $request)
+    {
+        $this->validate($request, [
+            'title' => 'required',
+            'description' => 'required',
+            'genre' => 'required',
+            'isbn' => 'required|unique:books',
+            'author_id' => 'required'
+        ]);
+
+        $book = Book::create($request->all());
+        return response()->json($book, 201);
+    }
+
+    /**
      * @test
      *
      * @param Request $request

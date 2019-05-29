@@ -72,4 +72,70 @@ class BooksTest extends TestCase
         $response->assertResponseStatus(200);
         $updatedBook->seeJson(["title" => "New Title"]);
     }
+
+    /**
+     * @test
+     *
+     * @return void
+     */
+    public function tryingToUpdateNonExistingBookReturns404()
+    {
+        $user = factory(User::class)->create();
+        $this->be($user);
+
+        $response = $this->put("/api/v1/books/isbnRandom", ["title" => "New Title"]);
+
+        $response->assertResponseStatus(404);
+    }
+
+    /**
+     * @test
+     *
+     * @return void
+     */
+    public function authUserCanAddABook()
+    {
+        $user = factory(User::class)->create();
+        $author = factory(Author::class)->create();
+        $this->be($user);
+        $book = [
+            'title' => 'test title',
+            'description' => 'test description',
+            'author_id' => $author->id,
+            'genre' => 'crime-fiction',
+            'isbn' => 'isbn'
+        ];
+
+        $response = $this->post('/api/v1/books', $book);
+
+        $response->assertResponseStatus(201);
+        $response->seeJson(["title" => "test title"]);
+    }
+
+    /**
+     * @test
+     *
+     * @return void
+     */
+    public function tryingToAddExistingBookReturns422()
+    {
+        $user = factory(User::class)->create();
+        $author = factory(Author::class)->create();
+        $this->be($user);
+        $book1 = factory(Book::class)->create();
+        $book = [
+            'title' => 'test title',
+            'description' => 'test description',
+            'author_id' => $author->id,
+            'genre' => 'crime-fiction',
+            'isbn' => $book1->isbn
+        ];
+
+        $response = $this->post('/api/v1/books', $book);
+
+        $response->assertResponseStatus(422);
+        $response->seeJson(["isbn" => [
+            "The isbn has already been taken."
+        ]]);
+    }
 }
