@@ -159,10 +159,12 @@ class AuthorsTest extends TestCase
      *
      * @return void
      */
-    public function searchingNonExistingAuthorReturns404()
+    public function userCanSortAuthors()
     {
-        $response = $this->get("/api/v1/authors?name=Random name");
-        
-        $response->assertResponseStatus(404);
+        factory(Author::class, 3)->create();
+
+        $response = $this->get("/api/v1/authors?sort=name_asc");
+
+        $response->assertResponseStatus(200);
     }
 }

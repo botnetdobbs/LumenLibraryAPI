@@ -25,13 +25,17 @@ class AuthorsController extends Controller
      */
     public function index(Request $request, Author $author)
     {
+        $authors = Author::with('books');
         if ($request->has('name')) {
             // Convert to lowercase due to postgres errors with using "ILIKE" on tests.
             $name = strtolower(htmlentities($request->name));
-            $result = $author->whereRaw('LOWER(name) like (?)',"%{$name}%")->get()->toArray();
-            return !empty($result) ? $result : response()->json(["status" => "error", "message" => "author not in our records"], 404);
+            $authors->whereRaw('LOWER(name) like (?)',"%{$name}%");;
         }
-        return $author->paginate(8);
+        if ($request->has('sort')) {
+            $keys = explode('_', $request->sort);
+            $authors->orderBy($keys[0], $keys[1]);
+        }
+        return $authors->paginate(8);
     }
 
     /**

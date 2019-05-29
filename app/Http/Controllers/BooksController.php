@@ -15,7 +15,25 @@ class BooksController extends Controller
      */
     public function index(Request $request)
     {
-        return Book::with('author')->paginate(8);
+        $books = Book::with('author');
+        
+        if ($request->has('sort')) {
+            $keys = explode('_', $request->sort);
+            $books->orderBy($keys[0], $keys[1]);
+        }
+        if ($request->has('title')) {
+            $title = strtolower($request->title);
+            $books->whereRaw('LOWER(title) like (?)', "%$title%");
+        }
+        if ($request->has('author')) {
+            $books->where(function ($query) use ($request) {
+                $query->whereHas('author', function ($query) use ($request) {
+                    $name = strtolower(htmlentities($request->author));
+                    $query->whereRaw('LOWER(name) like (?)', "%$name%");
+                });
+            });
+        }
+        return $books->paginate(8);
     }
 
     /**
@@ -90,4 +108,5 @@ class BooksController extends Controller
         $book->delete();
         return response()->json([], 204);
     }
+    
 }

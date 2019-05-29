@@ -31,9 +31,52 @@ class BooksTest extends TestCase
      *
      * @return void
      */
+    public function userCanSortBooks()
+    {   
+        factory(Book::class, 8)->create(); // author_id defaulted to 1
+
+        $response = $this->get("/api/v1/books?sort=title_asc");
+
+        $response->assertResponseStatus(200);
+
+    }
+
+    /**
+     * @test
+     *
+     * @return void
+     */
+    public function userCanfilterBooksByAuthor()
+    {
+        $author = factory(Author::class)->create();
+        factory(Book::class)->create(['author_id' => $author->id]);
+
+        $response = $this->get("/api/v1/books?author={$author->name}");
+
+        $response->assertResponseStatus(200);
+    }
+
+    /**
+     * @test
+     *
+     * @return void
+     */
+    public function userCanfilterBookBytitle()
+    {
+        $book = factory(Book::class)->create();
+
+        $response = $this->get("/api/v1/books?title={$book->title}");
+
+        $response->assertResponseStatus(200);
+    }
+
+    /**
+     * @test
+     *
+     * @return void
+     */
     public function userCanViewSingleBook()
     {
-        factory(Author::class)->create();
         $book = factory(Book::class)->create();
 
         $response = $this->get("/api/v1/books/{$book->isbn}");
@@ -62,7 +105,6 @@ class BooksTest extends TestCase
     public function authUserCanUpdateABook()
     {
         $user = factory(User::class)->create();
-        factory(Author::class)->create();
         $book = factory(Book::class)->create();
         $this->be($user);
 
@@ -147,7 +189,6 @@ class BooksTest extends TestCase
     public function authUserCanDeleteBook()
     {
         $user = factory(User::class)->create();
-        $author = factory(Author::class)->create();
         $this->be($user);
         $book = factory(Book::class)->create();
 
