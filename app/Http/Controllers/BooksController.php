@@ -72,4 +72,22 @@ class BooksController extends Controller
 
         return response()->json([], 200);
     }
+
+    /**
+     * Delete a specific book
+     *
+     * @param mixed $isbn
+     * @return void
+     */
+    public function destroy($isbn)
+    {
+        try {
+            $book = Book::findOrFail($isbn);
+        } catch (ModelNotFoundException $e) {
+            
+            return response()->json(["status" => "error", "message" => $e->getMessage()], 404);
+        }
+        $book->delete();
+        return response()->json([], 200);
+    }
 }

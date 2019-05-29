@@ -46,6 +46,7 @@ $router->group(['prefix' => 'api/v1'], function() use(&$router) {
         $router->group(['middleware' => 'auth:api'], function() use(&$router) {
             $router->post('/', 'BooksController@store');
             $router->put('/{isbn}', 'BooksController@update');
+            $router->delete('/{isbn}', 'BooksController@destroy');
         });
 
         $router->get('/', 'BooksController@index');

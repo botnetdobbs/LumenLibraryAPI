@@ -19,6 +19,9 @@ class CreateBooksTable extends Migration
             $table->text('description');
             $table->string('genre');
             $table->string('isbn');
+            $table->foreign('author_id')
+                ->references('id')->on('authors')
+                ->onDelete('cascade');
             $table->bigInteger('author_id');
             $table->timestamps();
         });

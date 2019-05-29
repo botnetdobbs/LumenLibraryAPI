@@ -69,21 +69,9 @@ class AuthController extends Controller
             'password' => 'required',
         ]);
 
-        try {
-
             if (!$token = $this->jwt->attempt($request->only('email', 'password'))) {
                 return response()->json(['status' => 'error', 'message' => 'user not found'], 404);
             }
-        } catch (TokenExpiredException $e) {
-
-            return response()->json(['status' => 'error', 'message' => 'token expired'], 401);
-        } catch (TokenInvalidException $e) {
-
-            return response()->json(['status' => 'error', 'message' => 'invalid access token'], 401);
-        } catch (JWTException $e) {
-
-            return response()->json(['status' => 'error', 'message' => 'token not present'], 401);
-        }
 
         return response()->json(['status' => 'ok', "access_token" => array_values(compact('token'))[0]], 200);
     }

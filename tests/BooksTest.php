@@ -138,4 +138,37 @@ class BooksTest extends TestCase
             "The isbn has already been taken."
         ]]);
     }
+
+    /**
+     * @test
+     *
+     * @return void
+     */
+    public function authUserCanDeleteBook()
+    {
+        $user = factory(User::class)->create();
+        $author = factory(Author::class)->create();
+        $this->be($user);
+        $book = factory(Book::class)->create();
+
+        $response = $this->delete("/api/v1/books/{$book->isbn}");
+
+        $response->assertResponseStatus(200);
+        $response->seeJson([]);
+    }
+
+    /**
+     * @test
+     *
+     * @return void
+     */
+    public function tryingToDeleteNonExistingBookReturns404()
+    {
+        $user = factory(User::class)->create();
+        $this->be($user);
+
+        $response = $this->delete("/api/v1/books/isbnRandom");
+
+        $response->assertResponseStatus(404);
+    }
 }
