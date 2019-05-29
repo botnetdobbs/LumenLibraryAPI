@@ -48,6 +48,7 @@ $router->group(['prefix' => 'api/v1'], function() use(&$router) {
         });
 
         $router->get('/', 'BooksController@index');
+        $router->get('/{isbn}', 'BooksController@show');
     });
 
 });

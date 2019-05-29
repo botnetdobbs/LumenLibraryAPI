@@ -21,7 +21,35 @@ class BooksTest extends TestCase
         factory(Book::class, 8)->create();
 
         $response = $this->get("/api/v1/books");
-        
+
         $response->assertResponseStatus(200);
+    }
+
+    /**
+     * @test
+     *
+     * @return void
+     */
+    public function userCanViewSingleBook()
+    {
+        factory(Author::class)->create();
+        $book = factory(Book::class)->create();
+
+        $response = $this->get("/api/v1/books/{$book->isbn}");
+
+        $response->assertResponseStatus(200);
+
+    }
+
+    /**
+     * @test
+     *
+     * @return void
+     */
+    public function tryingToGetNonExistingBookReturns404()
+    {
+        $response = $this->get("/api/v1/books/isbnrandom");
+
+        $response->assertResponseStatus(404);
     }
 }

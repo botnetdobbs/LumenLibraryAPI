@@ -8,8 +8,29 @@ use App\Book;
 
 class BooksController extends Controller
 {
+    /**
+     * Returns all the books
+     *
+     * @return void
+     */
     public function index()
     {
         return Book::with('author')->paginate(8);
+    }
+
+    /**
+     * Returns a single book
+     *
+     * @param [type] $isbn
+     * @return void
+     */
+    public function show($isbn)
+    {
+        try {
+            $book = Book::with('author')->findOrFail($isbn);
+        } catch (ModelNotFoundException $e) {
+            return response()->json(["status" => "error", "message" => $e->getMessage()], 404);
+        }
+        return $book;
     }
 }
