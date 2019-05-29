@@ -4,6 +4,7 @@ use Laravel\Lumen\Testing\DatabaseMigrations;
 use Laravel\Lumen\Testing\DatabaseTransactions;
 use App\Book;
 use App\Author;
+use App\User;
 
 class BooksTest extends TestCase
 {
@@ -51,5 +52,24 @@ class BooksTest extends TestCase
         $response = $this->get("/api/v1/books/isbnrandom");
 
         $response->assertResponseStatus(404);
+    }
+
+    /**
+     * @test
+     *
+     * @return void
+     */
+    public function authUserCanUpdateABook()
+    {
+        $user = factory(User::class)->create();
+        factory(Author::class)->create();
+        $book = factory(Book::class)->create();
+        $this->be($user);
+
+        $response = $this->put("/api/v1/books/{$book->isbn}", ["title" => "New Title"]);
+        $updatedBook = $this->get("/api/v1/books/{$book->isbn}");
+
+        $response->assertResponseStatus(200);
+        $updatedBook->seeJson(["title" => "New Title"]);
     }
 }

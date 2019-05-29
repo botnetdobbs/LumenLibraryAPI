@@ -33,4 +33,23 @@ class BooksController extends Controller
         }
         return $book;
     }
+
+    /**
+     * @test
+     *
+     * @param Request $request
+     * @return void
+     */
+    public function update(Request $request, $isbn)
+    {
+        try {
+            $book = Book::findOrFail($isbn);
+        } catch (ModelNotFoundException $e) {
+            
+            return response()->json(["status" => "error", "message" => $e->getMessage()], 404);
+        }
+        $book->update($request->all());
+
+        return response()->json([], 200);
+    }
 }
