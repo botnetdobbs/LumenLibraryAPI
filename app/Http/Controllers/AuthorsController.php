@@ -109,7 +109,7 @@ class AuthorsController extends Controller
             return response()->json(["status" => "error", "message" => $e->getMessage()], 404);
         }
         $author->delete();
-        return response()->json([], 200);
+        return response()->json([], 204);
     }
     
 }

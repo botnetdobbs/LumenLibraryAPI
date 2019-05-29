@@ -13,7 +13,7 @@ class BooksController extends Controller
      *
      * @return void
      */
-    public function index()
+    public function index(Request $request)
     {
         return Book::with('author')->paginate(8);
     }
@@ -88,6 +88,6 @@ class BooksController extends Controller
             return response()->json(["status" => "error", "message" => $e->getMessage()], 404);
         }
         $book->delete();
-        return response()->json([], 200);
+        return response()->json([], 204);
     }
 }

@@ -153,8 +153,7 @@ class BooksTest extends TestCase
 
         $response = $this->delete("/api/v1/books/{$book->isbn}");
 
-        $response->assertResponseStatus(200);
-        $response->seeJson([]);
+        $response->assertResponseStatus(204);
     }
 
     /**
