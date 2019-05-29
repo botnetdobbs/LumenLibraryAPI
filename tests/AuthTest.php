@@ -39,4 +39,21 @@ class AuthTest extends TestCase
 
         $response->assertResponseStatus(200);
     }
+
+    /**
+     * @test
+     *
+     * @return void
+     */
+    public function tryingToLoginAsNonExistingUserReturns404()
+    {
+        $credentials = [
+            'email' => 'random@email.com',
+            'password' => 'password'
+        ];
+
+        $response = $this->post('/api/v1/auth/login', $credentials);
+
+        $response->assertResponseStatus(404);
+    }
 }
