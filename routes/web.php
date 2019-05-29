@@ -42,4 +42,12 @@ $router->group(['prefix' => 'api/v1'], function() use(&$router) {
         $router->get('{id}', 'AuthorsController@show');
     });
 
+    $router->group(['prefix' => 'books'], function() use(&$router) {
+        $router->group(['middleware' => 'auth:api'], function() use(&$router) {
+            //
+        });
+
+        $router->get('/', 'BooksController@index');
+    });
+
 });

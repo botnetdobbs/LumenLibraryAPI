@@ -4,8 +4,12 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Author extends Model
+class Book extends Model
 {
+
+    protected $primaryKey = 'isbn';
+
+    public $incrementing = false;
 
     /**
      * The attributes that are mass assignable.
@@ -13,7 +17,7 @@ class Author extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'bio'
+        'title', 'description', 'genre', 'isbn', 'author_id'
     ];
 
     /**
@@ -22,17 +26,12 @@ class Author extends Model
      * @var array
      */
     protected $hidden = [
-        'created_at', 'updated_at'
+        'created_at', 'updated_at', 'author_id'
     ];
 
-
-    /**
-     * Relationship
-     *
-     * @return void
-     */
-    public function books()
+    public function author()
     {
-        return $this->hasMany('App\Book', 'author_id', 'id');
+        return $this->belongsTo('App\Author');
     }
+
 }
