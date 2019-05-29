@@ -2,6 +2,60 @@
 [![Maintainability](https://api.codeclimate.com/v1/badges/b2b6b6e77d685a07c408/maintainability)](https://codeclimate.com/github/botnetdobbs/LumenLibraryAPI/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/b2b6b6e77d685a07c408/test_coverage)](https://codeclimate.com/github/botnetdobbs/LumenLibraryAPI/test_coverage)
 
+### Interact with the [Hosted API](https://lumenlibraryapi.herokuapp.com/api/v1/books)
+
+## Setup
+
+### Dependencies
+
+* [PHP 7](http://php.net/) - popular general-purpose scripting language suited to web development
+* [Lumen 5.8](https://lumen.laravel.com/docs/5.8) - The stunningly fast micro-framework by Laravel
+
+### Getting Started
+
+Setting up project in development mode
+
+* Ensure PHP 7.0+ is installed by running:
+```
+php -v
+```
+
+* Clone the repository to your machine and navigate into it:
+```
+git clone https://github.com/botnetdobbs/LumenLibraryAPI.git && cd LumenLibraryAPI
+```
+* Install application dependencies:
+```
+composer install
+```
+* Create a *.env* file and include the necessary environment variables. NB- copy from the *.env.example* and fill in the correct values
+
+## Database setup
+Create your database locally on your machine, i.e `lumen_library_api`cand add it as a value to the respective environment variable as below.
+```
+DB_DATABASE=lumen_library_api
+```
+
+
+## Running the application
+Inside the project root folder, run the command below in your console
+```
+$ php artisan migrate:fresh
+```
+```
+$ php artisan db:seed
+```
+```
+$ php -S localhost:8001 -t public
+```
+
+
+## Running the tests
+
+```
+- $ ./vendor/bin/phpunit
+```
+
 
 | Method | Endpoint | Params |
 | ------ | ------ | ------- |
