@@ -139,4 +139,30 @@ class AuthorsTest extends TestCase
 
         $response->assertResponseStatus(404);
     }
+
+    /**
+     * @test
+     *
+     * @return void
+     */
+    public function userCanSearchForAnAuthor()
+    {
+        $author = factory(Author::class)->create();
+
+        $response = $this->get("/api/v1/authors?name={$author->name}");
+
+        $response->assertResponseStatus(200);
+    }
+
+    /**
+     * @test
+     *
+     * @return void
+     */
+    public function searchingNonExistingAuthorReturns404()
+    {
+        $response = $this->get("/api/v1/authors?name=Random name");
+        
+        $response->assertResponseStatus(404);
+    }
 }
