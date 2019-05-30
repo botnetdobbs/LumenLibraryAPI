@@ -50,10 +50,10 @@ class AuthorsController extends Controller
     public function show($id)
     {
         try {
-            $author = Author::findOrFail($id);
+            $author = Author::with('books')->findOrFail($id);
         } catch (ModelNotFoundException $e) {
 
-            return response()->json(["status" => "error", "message" => $e->getMessage()], 404);
+            return response()->json(["status" => "error", "message" => "Author not available in our records."], 404);
         }
         return response()->json($author, 200);
     }
@@ -95,7 +95,7 @@ class AuthorsController extends Controller
             $author = Author::findOrFail($id);
         } catch (ModelNotFoundException $e) {
 
-            return response()->json(["status" => "error", "message" => $e->getMessage()], 404);
+            return response()->json(["status" => "error", "message" => "Author not available in our records."], 404);
         }
         $author->update($request->all());
 
@@ -113,7 +113,7 @@ class AuthorsController extends Controller
         try {
             $author = Author::findOrFail($id);
         } catch (ModelNotFoundException $e) {
-            return response()->json(["status" => "error", "message" => $e->getMessage()], 404);
+            return response()->json(["status" => "error", "message" => "Author not available in our records."], 404);
         }
         $author->delete();
         return response()->json([], 204);

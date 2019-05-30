@@ -51,7 +51,7 @@ class BooksController extends Controller
         try {
             $book = Book::with('author')->findOrFail($isbn);
         } catch (ModelNotFoundException $e) {
-            return response()->json(["status" => "error", "message" => $e->getMessage()], 404);
+            return response()->json(["status" => "error", "message" => "Book not available in our records."], 404);
         }
         return $book;
     }
@@ -88,7 +88,7 @@ class BooksController extends Controller
             $book = Book::findOrFail($isbn);
         } catch (ModelNotFoundException $e) {
             
-            return response()->json(["status" => "error", "message" => $e->getMessage()], 404);
+            return response()->json(["status" => "error", "message" => "Book not available in our records."], 404);
         }
         $book->update($request->all());
 
@@ -107,7 +107,7 @@ class BooksController extends Controller
             $book = Book::findOrFail($isbn);
         } catch (ModelNotFoundException $e) {
             
-            return response()->json(["status" => "error", "message" => $e->getMessage()], 404);
+            return response()->json(["status" => "error", "message" => "Book not available in our records."], 404);
         }
         $book->delete();
         return response()->json([], 204);
