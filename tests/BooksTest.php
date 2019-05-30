@@ -17,13 +17,14 @@ class BooksTest extends TestCase
      */
     public function userCanViewAllExistingBooks()
     {
-        //Relationship: Author has many books
-        factory(Author::class)->create();
-        factory(Book::class, 8)->create();
+        $book = factory(Book::class)->create();
+        $book1 = factory(Book::class)->create();
 
         $response = $this->get("/api/v1/books");
 
         $response->assertResponseStatus(200);
+        $response->seeJson(['title' => $book->title]);
+        $response->seeJson(['isbn' => $book1->isbn]);
     }
 
     /**
@@ -33,7 +34,7 @@ class BooksTest extends TestCase
      */
     public function userCanSortBooks()
     {   
-        factory(Book::class, 8)->create(); // author_id defaulted to 1
+        factory(Book::class, 8)->create();
 
         $response = $this->get("/api/v1/books?sort=title_asc");
 
@@ -68,6 +69,7 @@ class BooksTest extends TestCase
         $response = $this->get("/api/v1/books?search={$book->title}");
 
         $response->assertResponseStatus(200);
+        $response->seeJson(['title' => $book->title]);
     }
 
     /**
@@ -96,6 +98,7 @@ class BooksTest extends TestCase
         $response = $this->get("/api/v1/books/{$book->isbn}");
 
         $response->assertResponseStatus(200);
+        $response->seeJson(['isbn' => $book->isbn]);
 
     }
 

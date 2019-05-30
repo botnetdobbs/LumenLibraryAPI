@@ -21,6 +21,7 @@ class AuthorsTest extends TestCase
         $this->be($user);
         $response = $this->post('/api/v1/authors', $author);
         $response->assertResponseStatus(201);
+        $response->seeJson(['name' => 'test author']);
 
     }
 
@@ -34,6 +35,7 @@ class AuthorsTest extends TestCase
         $author = ['name' => 'test author', 'bio' => 'A Kenyan author and a music enthusiast. Plays violin, Piano and Drums.', 'email' => 'test.author@email.com'];
         $response = $this->post('/api/v1/authors', $author);
         $response->assertResponseStatus(401);
+        $response->seeJson(['message' => 'Unauthorized']);
     }
 
     /**
@@ -43,11 +45,14 @@ class AuthorsTest extends TestCase
      */
     public function userCanViewAllAuthors()
     {
-        factory(Author::class, 8)->create();
+        $author = factory(Author::class)->create();
+        $author1 = factory(Author::class)->create();
 
         $response = $this->get('/api/v1/authors');
         
         $response->assertResponseStatus(200);
+        $response->seeJson(['bio' => $author->bio]);
+        $response->seeJson(['name' => $author->name]);
     }
 
     /**
@@ -62,6 +67,7 @@ class AuthorsTest extends TestCase
         $response = $this->get("/api/v1/authors/{$author->id}");
 
         $response->assertResponseStatus(200);
+        $response->seeJson(['email' => $author->email]);
     }
 
     /**
@@ -152,6 +158,7 @@ class AuthorsTest extends TestCase
         $response = $this->get("/api/v1/authors?name={$author->name}");
 
         $response->assertResponseStatus(200);
+        $response->seeJson(['name' => $author->name]);
     }
 
     /**
