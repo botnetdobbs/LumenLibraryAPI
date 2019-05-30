@@ -29,13 +29,16 @@ class AuthorsController extends Controller
         if ($request->has('name')) {
             // Convert to lowercase due to postgres errors with using "ILIKE" on tests.
             $name = strtolower(htmlentities($request->name));
-            $authors->whereRaw('LOWER(name) like (?)',"%{$name}%");;
+            $authors->whereRaw('LOWER(name) like (?)', "%{$name}%");;
         }
         if ($request->has('sort')) {
             $keys = explode('_', $request->sort);
             $authors->orderBy($keys[0], $keys[1]);
         }
-        return $authors->paginate(8);
+        if ($request->has('offset') && $request->has('limit')) {
+            $authors->offset($request->offset)->limit($request->limit);
+        }
+        return $authors->get();
     }
 
     /**
@@ -49,7 +52,7 @@ class AuthorsController extends Controller
         try {
             $author = Author::findOrFail($id);
         } catch (ModelNotFoundException $e) {
-            
+
             return response()->json(["status" => "error", "message" => $e->getMessage()], 404);
         }
         return response()->json($author, 200);
@@ -87,11 +90,11 @@ class AuthorsController extends Controller
             'bio' => 'max:300',
             'email' => 'email|unique:authors'
         ]);
-        
+
         try {
             $author = Author::findOrFail($id);
         } catch (ModelNotFoundException $e) {
-            
+
             return response()->json(["status" => "error", "message" => $e->getMessage()], 404);
         }
         $author->update($request->all());
@@ -115,5 +118,4 @@ class AuthorsController extends Controller
         $author->delete();
         return response()->json([], 204);
     }
-    
 }

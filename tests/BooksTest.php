@@ -61,11 +61,25 @@ class BooksTest extends TestCase
      *
      * @return void
      */
-    public function userCanfilterBookBytitle()
+    public function userCansearchBookBytitle()
     {
         $book = factory(Book::class)->create();
 
-        $response = $this->get("/api/v1/books?title={$book->title}");
+        $response = $this->get("/api/v1/books?search={$book->title}");
+
+        $response->assertResponseStatus(200);
+    }
+
+    /**
+     * @test
+     *
+     * @return void
+     */
+    public function userCanUseLimitAndOffsetToQueryBooks()
+    {
+        factory(Book::class, 50)->create();
+
+        $response = $this->get("/api/v1/books?offset=8&limit=10");
 
         $response->assertResponseStatus(200);
     }

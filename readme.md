@@ -61,7 +61,7 @@ $ php -S localhost:8001 -t public
 | ------ | ------ | ------- |
 | POST | ```api/v1/auth/register``` | ```json {"name": "Imega Crack", "email": "ctm@gmail.com", "password": "xbt3y0b07d0tn3t"}``` |
 | POST | ```api/v1/auth/login``` | ```json {"email": "ctm@gmail.com", "password": "xbt3y0b07d0tn3t"}``` |
-| GET | ```api/v1/books```| ```?author=Lazarus+Odhiambo,``` ```?title={book_title,}``` ```?sort=id_asc,``` ```?sort=title_desc,``` ```?sort=genre_asc``` |
+| GET | ```api/v1/books```| ```?author=Lazarus+Odhiambo,``` ```?search={book_title,}``` ```?sort=id_asc,``` ```?sort=title_desc,``` ```?sort=genre_asc``` ```?limit=10&offset=8``` |
 | GET | ```api/v1/books/{ISBN}``` | N/A |
 | POST | ```api/v1/books``` | ```json { "title": "my new book", "description": "my new boom description", "genre": "crime-fiction" "isbn": "isxbn","author_id": 1 }``` |
 | PUT | ```api/v1/books/{ISBN}``` | Any of the fields ☝️ |

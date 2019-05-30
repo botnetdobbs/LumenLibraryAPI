@@ -21,8 +21,8 @@ class BooksController extends Controller
             $keys = explode('_', $request->sort);
             $books->orderBy($keys[0], $keys[1]);
         }
-        if ($request->has('title')) {
-            $title = strtolower($request->title);
+        if ($request->has('search')) {
+            $title = strtolower($request->search);
             $books->whereRaw('LOWER(title) like (?)', "%$title%");
         }
         if ($request->has('author')) {
@@ -33,7 +33,11 @@ class BooksController extends Controller
                 });
             });
         }
-        return $books->paginate(8);
+        if ($request->has('offset') && $request->has('limit')) {
+            $books->offset($request->offset)->limit($request->limit);
+        }
+        
+        return $books->get();
     }
 
     /**

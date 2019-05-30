@@ -167,4 +167,18 @@ class AuthorsTest extends TestCase
 
         $response->assertResponseStatus(200);
     }
+
+    /**
+     * @test
+     *
+     * @return void
+     */
+    public function userCanUseLimitAndOffsetToQueryAuthors()
+    {
+        factory(Author::class, 50)->create();
+
+        $response = $this->get("/api/v1/authors?offset=8&limit=10");
+
+        $response->assertResponseStatus(200);
+    }
 }
