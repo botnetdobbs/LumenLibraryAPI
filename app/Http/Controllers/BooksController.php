@@ -37,7 +37,7 @@ class BooksController extends Controller
             $books->offset($request->offset)->limit($request->limit);
         }
         
-        return $books->get();
+        return $books->latest()->get();
     }
 
     /**

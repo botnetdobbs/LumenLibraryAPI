@@ -38,7 +38,7 @@ class AuthorsController extends Controller
         if ($request->has('offset') && $request->has('limit')) {
             $authors->offset($request->offset)->limit($request->limit);
         }
-        return $authors->get();
+        return $authors->latest()->get();
     }
 
     /**
