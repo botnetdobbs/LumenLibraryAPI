@@ -40,6 +40,10 @@ DB_DATABASE=lumen_library_api
 ## Running the application
 Inside the project root folder, run the command below in your console
 ```
+$ php artisan jwt:secret
+```
+
+```
 $ php artisan migrate:fresh
 ```
 ```
